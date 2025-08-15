@@ -1,66 +1,394 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Harry Teaches</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f8f9fa; color: #333; margin:0; padding:0; }
-        header { background: #1f2937; color: white; padding: 1rem; text-align: center; position: sticky; top: 0; }
-        nav a { color: white; margin: 0 10px; text-decoration: none; }
-        section { padding: 2rem; max-width: 900px; margin: auto; }
-        h2 { color: #1f2937; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; }
-        .step { background: white; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-        footer { text-align: center; background: #1f2937; color: white; padding: 1rem; margin-top: 2rem; }
-        button { background: #2563eb; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #1d4ed8; }
-        input, textarea { width: 100%; padding: 0.5rem; margin: 0.5rem 0; border-radius: 4px; border: 1px solid #ccc; }
-    </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Harry Teaches</title>
+<style>
+  :root{--bg:#f5f7fb;--card:#fff;--accent:#2563eb;--muted:#6b7280}
+  body{font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background:var(--bg); color:#111}
+  header{background:#0f172a;color:white;padding:18px 20px;position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between}
+  header h1{margin:0;font-size:20px}
+  nav a{color:#cfe3ff;margin-left:14px;text-decoration:none;font-size:14px}
+  .container{max-width:1100px;margin:26px auto;padding:0 18px}
+  .grid{display:grid;grid-template-columns:1fr 320px;gap:20px}
+  .card{background:var(--card);border-radius:10px;padding:16px;box-shadow:0 6px 20px rgba(12,15,25,0.06)}
+  h2{margin:0 0 12px 0;font-size:18px}
+  .section-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+  .btn{background:var(--accent);color:white;padding:8px 12px;border-radius:6px;border:0;cursor:pointer}
+  .btn.secondary{background:#64748b}
+  input,select,textarea{width:100%;padding:8px;border:1px solid #e6eef8;border-radius:6px;box-sizing:border-box}
+  label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
+  ul.resource-list{list-style:none;padding:0;margin:0}
+  li.resource{border-left:4px solid #e6eef8;padding:12px;margin-bottom:12px;border-radius:6px}
+  small.muted{color:var(--muted);font-size:13px}
+  footer{padding:20px;text-align:center;color:var(--muted);margin-top:28px}
+  .top-links{display:flex;gap:10px;align-items:center}
+  .admin-indicator{background:#051031;color:#9fe0ff;padding:6px 10px;border-radius:40px;font-size:13px}
+  .hidden{display:none}
+  .flex-between{display:flex;justify-content:space-between;align-items:center}
+  .tags{display:inline-block;background:#eef6ff;color:#0b2a5a;padding:4px 8px;border-radius:12px;margin-right:6px;font-size:12px}
+  .export-btn{background:#0b6b3a}
+  .search{display:flex;gap:8px}
+  .search input{width:220px}
+  .small{font-size:13px}
+</style>
 </head>
 <body>
+
 <header>
+  <div style="display:flex;align-items:center;gap:16px">
     <h1>Harry Teaches</h1>
     <nav>
-        <a href="#step1">Step One</a>
-        <a href="#step2">Step Two</a>
-        <a href="#research">Research</a>
-        <a href="#contact">Contact</a>
+      <a href="#step1">Step 1 (USMLE)</a>
+      <a href="#step2">Step 2 (USMLE)</a>
+      <a href="#research">Research</a>
+      <a href="#gym">Gym</a>
     </nav>
+  </div>
+
+  <div class="top-links">
+    <div id="adminBadge" class="admin-indicator hidden">Admin</div>
+    <button class="btn secondary" id="adminBtn">Admin → Login</button>
+  </div>
 </header>
-<section id="step1">
-    <h2>Step One</h2>
-    <div class="step">
-        <p>Welcome to Step One! This section will guide students through the first phase of learning. You can place your detailed step-by-step guidance here.</p>
+
+<div class="container grid">
+  <main>
+    <!-- Step 1 -->
+    <section id="step1" class="card">
+      <div class="flex-between"><h2>Step 1 (USMLE)</h2>
+        <div class="search">
+          <input id="searchInput" placeholder="Search materials..." />
+          <button class="btn" id="searchBtn">Search</button>
+        </div>
+      </div>
+      <p class="small">Curated materials for Step 1. Use the filters or search bar to find resources: Anki decks, First Aid pages, lectures, question banks, and PDFs (hosted externally).</p>
+
+      <ul id="resourcesList" class="resource-list" aria-live="polite"></ul>
+    </section>
+
+    <!-- Step 2 -->
+    <section id="step2" class="card" style="margin-top:18px">
+      <h2>Step 2 (USMLE)</h2>
+      <p class="small">Materials targeted to Step 2: clinical resources, shelf prep, CCs, Anki decks and high-yield notes.</p>
+
+      <ul id="resourcesListStep2" class="resource-list"></ul>
+    </section>
+
+    <!-- Research -->
+    <section id="research" class="card" style="margin-top:18px">
+      <h2>Research Hub</h2>
+      <p class="small">Articles, case series, PubMed links, templates and your notes.</p>
+      <ul id="researchList" class="resource-list"></ul>
+    </section>
+
+    <!-- Gym -->
+    <section id="gym" class="card" style="margin-top:18px">
+      <h2>Gym & Wellbeing</h2>
+      <p class="small">Training plans, simple workouts, and recovery notes for busy students.</p>
+      <ul id="gymList" class="resource-list"></ul>
+    </section>
+  </main>
+
+  <!-- Right column: admin panel & contact -->
+  <aside>
+    <div class="card">
+      <div class="flex-between">
+        <h2>Contact</h2>
+        <small class="muted">messages saved locally</small>
+      </div>
+      <form id="contactForm">
+        <label>Name</label>
+        <input id="contactName" required placeholder="Your name" />
+        <label>Email</label>
+        <input id="contactEmail" type="email" required placeholder="you@example.com" />
+        <label>Message</label>
+        <textarea id="contactMessage" rows="5" required placeholder="Your message..."></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button type="submit" class="btn">Send (save)</button>
+          <button type="button" class="btn secondary" id="clearFormBtn">Clear</button>
+        </div>
+      </form>
+      <p class="small" style="margin-top:10px">Note: messages are stored in your browser (localStorage). Admin can export them as CSV.</p>
     </div>
-</section>
-<section id="step2">
-    <h2>Step Two</h2>
-    <div class="step">
-        <p>Step Two builds on the foundation from Step One. Include your instructions, study plans, or training exercises here.</p>
+
+    <div id="adminPanel" class="card hidden" style="margin-top:16px">
+      <div class="flex-between"><h2>Admin Panel</h2>
+        <button class="btn export-btn" id="exportMessagesBtn">Export messages CSV</button>
+      </div>
+
+      <hr style="margin:10px 0">
+
+      <h3 style="margin:6px 0">Add Resource</h3>
+      <label>Category</label>
+      <select id="resCategory">
+        <option value="step1">Step 1</option>
+        <option value="step2">Step 2</option>
+        <option value="research">Research</option>
+        <option value="gym">Gym</option>
+      </select>
+      <label>Title</label><input id="resTitle" placeholder="e.g., Anki deck: First Aid 2023" />
+      <label>Type</label>
+      <select id="resType">
+        <option value="link">External Link</option>
+        <option value="anki">Anki / AnkiWeb</option>
+        <option value="file">File (upload to GitHub/Drive & paste URL)</option>
+        <option value="note">Note</option>
+      </select>
+      <label>URL or content</label><input id="resUrl" placeholder="https:// or AnkiWeb URL or short note" />
+      <label>Tags (comma separated)</label><input id="resTags" placeholder="anki,first-aid,cardio" />
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button id="addResBtn" class="btn">Add Resource</button>
+        <button id="clearStorageBtn" class="btn secondary">Clear all data</button>
+      </div>
+
+      <hr style="margin:10px 0">
+
+      <h3 style="margin:6px 0">View Messages</h3>
+      <div id="messagesArea" style="max-height:180px;overflow:auto"></div>
     </div>
-</section>
-<section id="research">
-    <h2>Research Hub</h2>
-    <div class="step">
-        <p>Provide your curated research materials, articles, and case studies for students. You can also link to PubMed, Google Scholar, or your own research notes.</p>
+
+    <div class="card" style="margin-top:16px">
+      <h2>Quick tips</h2>
+      <ul style="padding-left:18px">
+        <li class="small">To make files available to everyone: upload PDFs to the repo or host on Google Drive and paste the public link.</li>
+        <li class="small">To receive real emails: connect a form provider (Formspree, Netlify Forms) — I can show that next.</li>
+        <li class="small">Admin password is stored in the page code; change it when comfortable.</li>
+      </ul>
     </div>
-</section>
-<section id="contact">
-    <h2>Contact</h2>
-    <div class="step">
-        <form>
-            <label>Name</label>
-            <input type="text" name="name" placeholder="Your name" required>
-            <label>Email</label>
-            <input type="email" name="email" placeholder="Your email" required>
-            <label>Message</label>
-            <textarea name="message" rows="4" placeholder="Your message" required></textarea>
-            <button type="submit">Send Message</button>
-        </form>
-    </div>
-</section>
+  </aside>
+</div>
+
 <footer>
-    <p>&copy; 2025 Harry Teaches. All rights reserved.</p>
+  <small>Harry Teaches • Built locally • Admin saved to browser localStorage</small>
 </footer>
+
+<script>
+/* ========= Configuration =========
+   Change this password before publishing publicly
+   (this is only client-side protection — not secure for sensitive data)
+*/
+const ADMIN_PASSWORD = "harry123";
+
+/* Keys used in localStorage */
+const LS_KEYS = {
+  resources: "harry_resources_v1",
+  messages: "harry_messages_v1",
+  adminLogged: "harry_admin_v1"
+};
+
+/* Utility */
+function $id(id){ return document.getElementById(id); }
+function saveJSON(key, obj){ localStorage.setItem(key, JSON.stringify(obj || [])); }
+function loadJSON(key){ try { return JSON.parse(localStorage.getItem(key)) || []; } catch(e){ return []; } }
+
+/* Start-up: load resources and messages */
+let resources = loadJSON(LS_KEYS.resources);
+let messages = loadJSON(LS_KEYS.messages);
+
+/* Rendering functions */
+function renderResources(){
+  // Clear lists
+  const lists = {
+    step1: $id("resourcesList"),
+    step2: $id("resourcesListStep2"),
+    research: $id("researchList"),
+    gym: $id("gymList")
+  };
+  for(const k in lists) lists[k].innerHTML = "";
+
+  const searchTerm = $id("searchInput").value.trim().toLowerCase();
+
+  const filtered = resources.filter(r=>{
+    if(!searchTerm) return true;
+    return (r.title + " " + (r.tags||"") + " " + (r.url||"") ).toLowerCase().includes(searchTerm);
+  });
+
+  filtered.sort((a,b)=> (a.created||0) - (b.created||0));
+
+  filtered.forEach(r=>{
+    const li = document.createElement("li");
+    li.className = "resource";
+    const tags = (r.tags||"").split(",").map(t=>t.trim()).filter(Boolean);
+    li.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:start;gap:12px">
+        <div style="flex:1">
+          <strong>${escapeHtml(r.title)}</strong>
+          <div style="margin-top:6px">${escapeHtml(r.description||"")}</div>
+          <div style="margin-top:8px">
+            ${tags.map(t=>`<span class="tags">${escapeHtml(t)}</span>`).join(" ")}
+          </div>
+          <div style="margin-top:10px" class="small muted">
+            ${escapeHtml(r.type || "")} • added ${new Date(r.created).toLocaleString()}
+          </div>
+        </div>
+        <div style="min-width:120px;text-align:right">
+          ${r.url ? `<a class="btn" href="${escapeAttr(r.url)}" target="_blank" rel="noopener noreferrer">Open</a>` : ""}
+          ${r.type === "anki" ? `<div style="margin-top:6px"><a class="btn secondary" href="${escapeAttr(r.url)}" target="_blank">AnkiWeb</a></div>` : ""}
+        </div>
+      </div>
+    `;
+    // add to correct category list
+    const listEl = lists[r.category];
+    if(listEl) listEl.appendChild(li);
+  });
+
+  // If empty show placeholder
+  for(const k in lists) if(!lists[k].children.length) lists[k].innerHTML = "<div class='small muted'>No resources yet.</div>";
+}
+
+function renderMessages(){
+  const area = $id("messagesArea");
+  area.innerHTML = "";
+  if(!messages.length){ area.innerHTML = "<div class='small muted'>No messages yet.</div>"; return; }
+  messages.slice().reverse().forEach((m, i)=>{
+    const d = new Date(m.ts);
+    const div = document.createElement("div");
+    div.style.borderBottom = "1px solid #eef6ff";
+    div.style.padding = "8px 0";
+    div.innerHTML = `<strong>${escapeHtml(m.name)}</strong> <small class="muted">(${escapeHtml(m.email)}) • ${d.toLocaleString()}</small>
+      <div style="margin-top:6px">${escapeHtml(m.msg)}</div>`;
+    area.appendChild(div);
+  });
+}
+
+/* Contact form */
+$id("contactForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const name = $id("contactName").value.trim();
+  const email = $id("contactEmail").value.trim();
+  const msg = $id("contactMessage").value.trim();
+  if(!name || !email || !msg){ alert("Please fill all fields."); return; }
+  const entry = { name, email, msg, ts: Date.now() };
+  messages.push(entry);
+  saveJSON(LS_KEYS.messages, messages);
+  $id("contactForm").reset();
+  alert("Message saved locally. Admin can export messages as CSV from Admin panel.");
+  renderMessages();
+});
+
+/* Admin login / logout */
+let isAdmin = localStorage.getItem(LS_KEYS.adminLogged) === "1";
+function updateAdminUI(){
+  if(isAdmin){
+    $id("adminPanel").classList.remove("hidden");
+    $id("adminBadge").classList.remove("hidden");
+    $id("adminBtn").textContent = "Admin → Logout";
+  } else {
+    $id("adminPanel").classList.add("hidden");
+    $id("adminBadge").classList.add("hidden");
+    $id("adminBtn").textContent = "Admin → Login";
+  }
+}
+$id("adminBtn").addEventListener("click", function(){
+  if(isAdmin){
+    // logout
+    localStorage.removeItem(LS_KEYS.adminLogged);
+    isAdmin=false;
+    updateAdminUI();
+    return;
+  }
+  const pw = prompt("Enter admin password:");
+  if(pw === ADMIN_PASSWORD){
+    isAdmin = true;
+    localStorage.setItem(LS_KEYS.adminLogged, "1");
+    updateAdminUI();
+    renderMessages();
+    renderResources();
+  } else {
+    alert("Incorrect password.");
+  }
+});
+
+/* Add resource */
+$id("addResBtn").addEventListener("click", function(){
+  if(!isAdmin){ alert("Please log in as admin to add resources."); return; }
+  const category = $id("resCategory").value;
+  const title = $id("resTitle").value.trim();
+  const type = $id("resType").value;
+  const url = $id("resUrl").value.trim();
+  const tags = $id("resTags").value.trim();
+  if(!title){ alert("Please provide a title"); return; }
+  const obj = {
+    id: Date.now() + "-" + Math.random().toString(36).slice(2,8),
+    category, title, type, url, tags, description: "", created: Date.now()
+  };
+  resources.push(obj);
+  saveJSON(LS_KEYS.resources, resources);
+  // clear inputs
+  $id("resTitle").value = ""; $id("resUrl").value = ""; $id("resTags").value = "";
+  alert("Resource added (saved to browser). To make it available to everyone, upload files or share public links.");
+  renderResources();
+});
+
+/* Clear storage */
+$id("clearStorageBtn").addEventListener("click", function(){
+  if(!isAdmin) return alert("Admin only.");
+  if(!confirm("This will clear all resources and messages in your browser. Are you sure?")) return;
+  resources = []; messages = [];
+  saveJSON(LS_KEYS.resources, resources);
+  saveJSON(LS_KEYS.messages, messages);
+  renderResources(); renderMessages();
+  alert("Local data cleared.");
+});
+
+/* Export messages as CSV */
+$id("exportMessagesBtn").addEventListener("click", function(){
+  if(!isAdmin) return alert("Admin only.");
+  if(!messages.length) return alert("No messages to export.");
+  const header = ["name","email","message","timestamp"];
+  const rows = messages.map(m=>[m.name, m.email, m.msg, new Date(m.ts).toISOString()]);
+  const csv = [header].concat(rows).map(r=>r.map(cell=>`"${String(cell).replace(/"/g,'""')}"`).join(",")).join("\n");
+  const blob = new Blob([csv], {type: "text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "harry_messages.csv"; document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+});
+
+/* Search */
+$id("searchBtn").addEventListener("click", renderResources);
+$id("searchInput").addEventListener("keyup", function(e){ if(e.key === "Enter") renderResources(); });
+
+/* Helpers for safe HTML */
+function escapeHtml(s){ if(!s) return ""; return String(s).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" })[m]); }
+function escapeAttr(s){ return encodeURI(String(s||"")); }
+
+/* Initial render */
+renderResources();
+renderMessages();
+updateAdminUI();
+
+/* Optional: demo data if empty (only when first time) */
+if(!resources.length){
+  resources.push({
+    id: "demo-1",
+    category: "step1",
+    title: "First Aid - High Yield Rapid Review (link)",
+    type: "link",
+    url: "https://www.amazon.com/First-Aid-USMLE-Step-1/dp/1264269380",
+    tags: "first-aid,high-yield",
+    description: "Link to First Aid (book listing) — for students, use your own PDF or library link.",
+    created: Date.now()
+  });
+  resources.push({
+    id: "demo-2",
+    category: "step1",
+    title: "Anki – Sketchy / Zanki deck (AnkiWeb)",
+    type: "anki",
+    url: "https://ankiweb.net/shared/info/123456789", // replace with real deck
+    tags: "anki,zanki,sketchy",
+    description: "Anki deck link (replace with correct AnkiWeb URL).",
+    created: Date.now()
+  });
+  saveJSON(LS_KEYS.resources, resources);
+  renderResources();
+}
+
+/* Finished */
+</script>
 </body>
 </html>
+
+
