@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Harry Teaches</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f8f9fa; color: #333; margin:0; padding:0; }
+        header { background: #1f2937; color: white; padding: 1rem; text-align: center; position: sticky; top: 0; }
+        nav a { color: white; margin: 0 10px; text-decoration: none; }
+        section { padding: 2rem; max-width: 900px; margin: auto; }
+        h2 { color: #1f2937; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.5rem; }
+        .step { background: white; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+        footer { text-align: center; background: #1f2937; color: white; padding: 1rem; margin-top: 2rem; }
+        button { background: #2563eb; color: white; padding: 0.5rem 1rem; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #1d4ed8; }
+        input, textarea { width: 100%; padding: 0.5rem; margin: 0.5rem 0; border-radius: 4px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Harry Teaches</h1>
+    <nav>
+        <a href="#step1">Step One</a>
+        <a href="#step2">Step Two</a>
+        <a href="#research">Research</a>
+        <a href="#contact">Contact</a>
+    </nav>
+</header>
+<section id="step1">
+    <h2>Step One</h2>
+    <div class="step">
+        <p>Welcome to Step One! This section will guide students through the first phase of learning. You can place your detailed step-by-step guidance here.</p>
+    </div>
+</section>
+<section id="step2">
+    <h2>Step Two</h2>
+    <div class="step">
+        <p>Step Two builds on the foundation from Step One. Include your instructions, study plans, or training exercises here.</p>
+    </div>
+</section>
+<section id="research">
+    <h2>Research Hub</h2>
+    <div class="step">
+        <p>Provide your curated research materials, articles, and case studies for students. You can also link to PubMed, Google Scholar, or your own research notes.</p>
+    </div>
+</section>
+<section id="contact">
+    <h2>Contact</h2>
+    <div class="step">
+        <form>
+            <label>Name</label>
+            <input type="text" name="name" placeholder="Your name" required>
+            <label>Email</label>
+            <input type="email" name="email" placeholder="Your email" required>
+            <label>Message</label>
+            <textarea name="message" rows="4" placeholder="Your message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </div>
+</section>
+<footer>
+    <p>&copy; 2025 Harry Teaches. All rights reserved.</p>
+</footer>
+</body>
+</html>
